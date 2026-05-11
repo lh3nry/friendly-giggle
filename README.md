@@ -23,6 +23,17 @@ containers = execution units
 Airflow/Kubernetes/Cloud Run = runtime
 ```
 
+```mermaid
+flowchart LR
+  A[specs/*.yaml] --> B[build/generate_runtime.py]
+  B --> C[runtime/dags/generated/*.py]
+  B --> D[runtime/docker-bake.generated.hcl]
+  B --> E[runtime/quality/generated/*]
+  C --> F[Airflow scheduler]
+  D --> G[Container builds]
+  E --> H[Quality checks]
+```
+
 ## Data zones
 
 - raw_zone: everything lands here, including messy or malformed source data
@@ -81,6 +92,18 @@ raw_news
 -> clean_room_news or quarantined_news
 ```
 
+```mermaid
+flowchart LR
+  A[raw_news] --> B[normalize_news]
+  B --> C[clean_news_candidate]
+  C --> D[validate_clean_news]
+  D --> E[clean_news_quality_scorecard]
+  E --> F{promotion_rules}
+  F -->|overall_score >= 0.90| G[trusted_training_zone]
+  F -->|0.75 <= overall_score < 0.90| H[clean_room_zone]
+  F -->|hard gate failed or score < 0.75| I[quarantined_news]
+```
+
 ## Future direction
 
 The first version uses deterministic quality gates.
@@ -96,4 +119,12 @@ That creates a feedback loop:
 
 ```text
 quality metadata -> promotion decision -> training outcome -> improved quality classifier
+```
+
+```mermaid
+flowchart LR
+  A[quality metadata] --> B[promotion decision]
+  B --> C[training outcome]
+  C --> D[quality classifier update]
+  D --> A
 ```
