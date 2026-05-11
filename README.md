@@ -128,3 +128,18 @@ flowchart LR
   C --> D[quality classifier update]
   D --> A
 ```
+
+## Section 5 and related topics
+
+Quality-filter learning (section 5) should be designed together with these adjacent decisions:
+
+- hard gates vs soft scores semantics (fail-closed behavior, threshold versioning, override policy)
+- point-in-time correctness and leakage prevention (`as_of_time`, late labels, train/serve consistency)
+- metadata contract design for `DataQualityObservation`, `AssetManifest`, and lineage IDs
+- promotion decision auditability (input checks, rule version, score vector, final disposition)
+- backfill/replay/idempotency behavior for generated DAGs and asset writes
+- asset and feature versioning strategy for reproducible training datasets
+- human-in-the-loop quarantine triage and reviewer feedback capture
+- generator/compiler guarantees (deterministic outputs, diffability, compatibility checks)
+- observability and SLOs (freshness, validation latency, promotion/quarantine rates, drift)
+- governance and security boundaries across raw, clean-room, and trusted-training zones
