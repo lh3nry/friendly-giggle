@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AssetManifest",
+  "type": "object",
+  "required": [
+    "asset_name",
+    "asset_version",
+    "output_uri",
+    "created_at"
+  ],
+  "properties": {
+    "asset_name": { "type": "string" },
+    "asset_version": { "type": "string" },
+    "output_uri": { "type": "string" },
+    "input_assets": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "record_count": { "type": "integer", "minimum": 0 },
+    "code_version": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,20 @@
+quality_profiles:
+  - name: clean_news_v1
+    asset: clean_news_candidate
+    hard_gates:
+      - schema_valid
+      - observed_at_present
+      - no_future_timestamps
+      - duplicate_rate_below_max
+      - leakage_safety_valid
+    soft_scores:
+      completeness_quality: 0.20
+      freshness_quality: 0.15
+      deduplication_quality: 0.15
+      entity_linking_quality: 0.20
+      source_reliability_quality: 0.15
+      distribution_quality: 0.15
+    thresholds:
+      trusted_training: 0.90
+      clean_room_warning: 0.75
+      quarantine_below: 0.75

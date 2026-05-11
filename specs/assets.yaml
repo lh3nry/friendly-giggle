@@ -1,0 +1,31 @@
+assets:
+  - name: raw_news
+    uri: market://raw/news
+    zone: raw
+    owner: ingestion
+  - name: clean_news_candidate
+    uri: market://clean-candidate/news
+    zone: clean_candidate
+    owner: ingestion
+    depends_on:
+      - raw_news
+  - name: clean_news_quality_scorecard
+    uri: market://quality/news
+    zone: metadata
+    owner: quality
+    depends_on:
+      - clean_news_candidate
+  - name: clean_room_news
+    uri: market://clean-room/news
+    zone: clean_room
+    owner: ingestion
+    depends_on:
+      - clean_news_candidate
+      - clean_news_quality_scorecard
+  - name: quarantined_news
+    uri: market://quarantine/news
+    zone: quarantine
+    owner: quality
+    depends_on:
+      - clean_news_candidate
+      - clean_news_quality_scorecard

@@ -1,0 +1,17 @@
+promotion_rules:
+  - name: news_clean_room_v1
+    input_asset: clean_news_candidate
+    scorecard_asset: clean_news_quality_scorecard
+    decisions:
+      - name: quarantine
+        when:
+          any_hard_gate_failed: true
+      - name: trusted_training
+        when:
+          overall_score_gte: 0.90
+      - name: clean_room_warning
+        when:
+          overall_score_gte: 0.75
+      - name: quarantine
+        when:
+          overall_score_lt: 0.75

@@ -1,0 +1,17 @@
+dags:
+  - name: ingest_news
+    schedule: "@hourly"
+    tasks:
+      - ingest_news
+
+  - name: normalize_and_validate_news
+    schedule:
+      asset_trigger:
+        any:
+          - raw_news
+    tasks:
+      - normalize_news
+      - validate_clean_news
+    dependencies:
+      - from: normalize_news
+        to: validate_clean_news

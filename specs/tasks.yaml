@@ -1,0 +1,41 @@
+tasks:
+  - name: ingest_news
+    kind: python_batch
+    source_dir: tasks/ingest_news
+    runtime: python
+    python_version: "3.12"
+    entrypoint: python -m ingest_news.main
+    outputs:
+      - raw_news
+    image:
+      name: market/ingest-news
+      tag_from: git_sha
+
+  - name: normalize_news
+    kind: python_batch
+    source_dir: tasks/normalize_news
+    runtime: python
+    python_version: "3.12"
+    entrypoint: python -m normalize_news.main
+    inputs:
+      - raw_news
+    outputs:
+      - clean_news_candidate
+    image:
+      name: market/normalize-news
+      tag_from: git_sha
+
+  - name: validate_clean_news
+    kind: quality_check
+    source_dir: tasks/validate_clean_news
+    runtime: python
+    python_version: "3.12"
+    entrypoint: python -m validate_clean_news.main
+    inputs:
+      - clean_news_candidate
+    outputs:
+      - clean_news_quality_scorecard
+    quality_profile: clean_news_v1
+    image:
+      name: market/validate-clean-news
+      tag_from: git_sha

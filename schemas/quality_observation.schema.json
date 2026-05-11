@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DataQualityObservation",
+  "type": "object",
+  "required": [
+    "asset_name",
+    "asset_version",
+    "quality_profile",
+    "overall_score",
+    "promotion_decision",
+    "checked_at"
+  ],
+  "properties": {
+    "asset_name": { "type": "string" },
+    "asset_version": { "type": "string" },
+    "quality_profile": { "type": "string" },
+    "overall_score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "promotion_decision": { "type": "string" },
+    "hard_gates": { "type": "object" },
+    "soft_scores": { "type": "object" },
+    "blocking_failures": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "checked_at": { "type": "string", "format": "date-time" }
+  }
+}
