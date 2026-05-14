@@ -1,0 +1,19 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task normalize_price_bars",
+  "image": {
+    "name": "market/normalize-price-bars",
+    "tag_from": "git_sha"
+  },
+  "inputs": [
+    "raw_alpha_vantage_daily_bars",
+    "raw_tiingo_daily_bars"
+  ],
+  "kind": "python_batch",
+  "name": "normalize_price_bars",
+  "outputs": [
+    "clean_price_bars_candidate"
+  ],
+  "python_version": "3.12",
+  "runtime": "python",
+  "source_dir": "runtime/stubs"
+}

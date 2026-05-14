@@ -1,0 +1,19 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task validate_market_feature_panel",
+  "image": {
+    "name": "market/validate-market-feature-panel",
+    "tag_from": "git_sha"
+  },
+  "inputs": [
+    "training_market_feature_panel_candidate"
+  ],
+  "kind": "quality_check",
+  "name": "validate_market_feature_panel",
+  "outputs": [
+    "training_market_feature_panel_quality_scorecard"
+  ],
+  "python_version": "3.12",
+  "quality_profile": "market_feature_panel_v1",
+  "runtime": "python",
+  "source_dir": "runtime/stubs"
+}

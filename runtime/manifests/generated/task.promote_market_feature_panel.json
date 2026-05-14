@@ -1,0 +1,20 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task promote_market_feature_panel",
+  "image": {
+    "name": "market/promote-market-feature-panel",
+    "tag_from": "git_sha"
+  },
+  "inputs": [
+    "training_market_feature_panel_candidate",
+    "training_market_feature_panel_quality_scorecard"
+  ],
+  "kind": "promotion",
+  "name": "promote_market_feature_panel",
+  "outputs": [
+    "trusted_training_market_feature_panel"
+  ],
+  "promotion_rule": "market_feature_panel_training_v1",
+  "python_version": "3.12",
+  "runtime": "python",
+  "source_dir": "runtime/stubs"
+}

@@ -1,0 +1,23 @@
+{
+  "asset": "training_market_feature_panel_candidate",
+  "hard_gates": [
+    "schema_valid",
+    "as_of_time_present",
+    "no_label_leakage",
+    "feature_timestamp_lte_as_of_time",
+    "join_keys_present"
+  ],
+  "name": "market_feature_panel_v1",
+  "soft_scores": {
+    "cross_source_join_quality": 0.2,
+    "distribution_quality": 0.2,
+    "feature_completeness_quality": 0.25,
+    "label_maturity_quality": 0.2,
+    "training_window_coverage_quality": 0.15
+  },
+  "thresholds": {
+    "clean_room_warning": 0.82,
+    "quarantine_below": 0.82,
+    "trusted_training": 0.93
+  }
+}

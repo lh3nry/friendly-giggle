@@ -1,0 +1,19 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task validate_company_reference",
+  "image": {
+    "name": "market/validate-company-reference",
+    "tag_from": "git_sha"
+  },
+  "inputs": [
+    "clean_company_reference_candidate"
+  ],
+  "kind": "quality_check",
+  "name": "validate_company_reference",
+  "outputs": [
+    "clean_company_reference_quality_scorecard"
+  ],
+  "python_version": "3.12",
+  "quality_profile": "company_reference_v1",
+  "runtime": "python",
+  "source_dir": "runtime/stubs"
+}

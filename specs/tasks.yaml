@@ -1,41 +1,243 @@
-tasks:
-  - name: ingest_news
-    kind: python_batch
-    source_dir: tasks/ingest_news
-    runtime: python
-    python_version: "3.12"
-    entrypoint: python -m ingest_news.main
-    outputs:
-      - raw_news
-    image:
-      name: market/ingest-news
-      tag_from: git_sha
-
-  - name: normalize_news
-    kind: python_batch
-    source_dir: tasks/normalize_news
-    runtime: python
-    python_version: "3.12"
-    entrypoint: python -m normalize_news.main
-    inputs:
-      - raw_news
-    outputs:
-      - clean_news_candidate
-    image:
-      name: market/normalize-news
-      tag_from: git_sha
-
-  - name: validate_clean_news
-    kind: quality_check
-    source_dir: tasks/validate_clean_news
-    runtime: python
-    python_version: "3.12"
-    entrypoint: python -m validate_clean_news.main
-    inputs:
-      - clean_news_candidate
-    outputs:
-      - clean_news_quality_scorecard
-    quality_profile: clean_news_v1
-    image:
-      name: market/validate-clean-news
-      tag_from: git_sha
+{
+  "tasks": [
+    {
+      "name": "ingest_kaggle_stock_news",
+      "kind": "stub_ingestion",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task ingest_kaggle_stock_news",
+      "source": "kaggle_stock_news",
+      "outputs": ["raw_kaggle_stock_news"],
+      "image": { "name": "market/ingest-kaggle-stock-news", "tag_from": "git_sha" }
+    },
+    {
+      "name": "ingest_finnhub_company_news",
+      "kind": "stub_ingestion",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task ingest_finnhub_company_news",
+      "source": "finnhub_open_data",
+      "outputs": ["raw_finnhub_company_news"],
+      "image": { "name": "market/ingest-finnhub-company-news", "tag_from": "git_sha" }
+    },
+    {
+      "name": "ingest_alpha_vantage_news_sentiment",
+      "kind": "stub_ingestion",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task ingest_alpha_vantage_news_sentiment",
+      "source": "alpha_vantage",
+      "outputs": ["raw_alpha_vantage_news_sentiment"],
+      "image": { "name": "market/ingest-alpha-vantage-news-sentiment", "tag_from": "git_sha" }
+    },
+    {
+      "name": "normalize_news",
+      "kind": "python_batch",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task normalize_news",
+      "inputs": ["raw_kaggle_stock_news", "raw_finnhub_company_news", "raw_alpha_vantage_news_sentiment"],
+      "outputs": ["clean_news_candidate"],
+      "image": { "name": "market/normalize-news", "tag_from": "git_sha" }
+    },
+    {
+      "name": "validate_clean_news",
+      "kind": "quality_check",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task validate_clean_news",
+      "inputs": ["clean_news_candidate"],
+      "outputs": ["clean_news_quality_scorecard"],
+      "quality_profile": "clean_news_v1",
+      "image": { "name": "market/validate-clean-news", "tag_from": "git_sha" }
+    },
+    {
+      "name": "promote_clean_news",
+      "kind": "promotion",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task promote_clean_news",
+      "inputs": ["clean_news_candidate", "clean_news_quality_scorecard"],
+      "outputs": ["clean_room_news"],
+      "promotion_rule": "news_clean_room_v1",
+      "image": { "name": "market/promote-clean-news", "tag_from": "git_sha" }
+    },
+    {
+      "name": "ingest_alpha_vantage_daily_bars",
+      "kind": "stub_ingestion",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task ingest_alpha_vantage_daily_bars",
+      "source": "alpha_vantage",
+      "outputs": ["raw_alpha_vantage_daily_bars"],
+      "image": { "name": "market/ingest-alpha-vantage-daily-bars", "tag_from": "git_sha" }
+    },
+    {
+      "name": "ingest_tiingo_daily_bars",
+      "kind": "stub_ingestion",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task ingest_tiingo_daily_bars",
+      "source": "tiingo",
+      "outputs": ["raw_tiingo_daily_bars"],
+      "image": { "name": "market/ingest-tiingo-daily-bars", "tag_from": "git_sha" }
+    },
+    {
+      "name": "normalize_price_bars",
+      "kind": "python_batch",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task normalize_price_bars",
+      "inputs": ["raw_alpha_vantage_daily_bars", "raw_tiingo_daily_bars"],
+      "outputs": ["clean_price_bars_candidate"],
+      "image": { "name": "market/normalize-price-bars", "tag_from": "git_sha" }
+    },
+    {
+      "name": "validate_price_bars",
+      "kind": "quality_check",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task validate_price_bars",
+      "inputs": ["clean_price_bars_candidate"],
+      "outputs": ["clean_price_bars_quality_scorecard"],
+      "quality_profile": "clean_price_bars_v1",
+      "image": { "name": "market/validate-price-bars", "tag_from": "git_sha" }
+    },
+    {
+      "name": "promote_price_bars",
+      "kind": "promotion",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task promote_price_bars",
+      "inputs": ["clean_price_bars_candidate", "clean_price_bars_quality_scorecard"],
+      "outputs": ["clean_room_price_bars"],
+      "promotion_rule": "price_bars_clean_room_v1",
+      "image": { "name": "market/promote-price-bars", "tag_from": "git_sha" }
+    },
+    {
+      "name": "ingest_finnhub_company_profile",
+      "kind": "stub_ingestion",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task ingest_finnhub_company_profile",
+      "source": "finnhub_open_data",
+      "outputs": ["raw_finnhub_company_profile"],
+      "image": { "name": "market/ingest-finnhub-company-profile", "tag_from": "git_sha" }
+    },
+    {
+      "name": "ingest_tiingo_symbol_metadata",
+      "kind": "stub_ingestion",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task ingest_tiingo_symbol_metadata",
+      "source": "tiingo",
+      "outputs": ["raw_tiingo_symbol_metadata"],
+      "image": { "name": "market/ingest-tiingo-symbol-metadata", "tag_from": "git_sha" }
+    },
+    {
+      "name": "normalize_company_reference",
+      "kind": "python_batch",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task normalize_company_reference",
+      "inputs": ["raw_finnhub_company_profile", "raw_tiingo_symbol_metadata"],
+      "outputs": ["clean_company_reference_candidate"],
+      "image": { "name": "market/normalize-company-reference", "tag_from": "git_sha" }
+    },
+    {
+      "name": "validate_company_reference",
+      "kind": "quality_check",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task validate_company_reference",
+      "inputs": ["clean_company_reference_candidate"],
+      "outputs": ["clean_company_reference_quality_scorecard"],
+      "quality_profile": "company_reference_v1",
+      "image": { "name": "market/validate-company-reference", "tag_from": "git_sha" }
+    },
+    {
+      "name": "promote_company_reference",
+      "kind": "promotion",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task promote_company_reference",
+      "inputs": ["clean_company_reference_candidate", "clean_company_reference_quality_scorecard"],
+      "outputs": ["clean_room_company_reference"],
+      "promotion_rule": "company_reference_clean_room_v1",
+      "image": { "name": "market/promote-company-reference", "tag_from": "git_sha" }
+    },
+    {
+      "name": "ingest_alpha_vantage_company_overview",
+      "kind": "stub_ingestion",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task ingest_alpha_vantage_company_overview",
+      "source": "alpha_vantage",
+      "outputs": ["raw_alpha_vantage_company_overview"],
+      "image": { "name": "market/ingest-alpha-vantage-company-overview", "tag_from": "git_sha" }
+    },
+    {
+      "name": "normalize_fundamentals",
+      "kind": "python_batch",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task normalize_fundamentals",
+      "inputs": ["raw_alpha_vantage_company_overview", "clean_room_company_reference"],
+      "outputs": ["clean_fundamentals_candidate"],
+      "image": { "name": "market/normalize-fundamentals", "tag_from": "git_sha" }
+    },
+    {
+      "name": "build_market_feature_panel",
+      "kind": "python_batch",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task build_market_feature_panel",
+      "inputs": ["clean_room_news", "clean_room_price_bars", "clean_room_company_reference", "clean_fundamentals_candidate"],
+      "outputs": ["training_market_feature_panel_candidate"],
+      "image": { "name": "market/build-market-feature-panel", "tag_from": "git_sha" }
+    },
+    {
+      "name": "validate_market_feature_panel",
+      "kind": "quality_check",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task validate_market_feature_panel",
+      "inputs": ["training_market_feature_panel_candidate"],
+      "outputs": ["training_market_feature_panel_quality_scorecard"],
+      "quality_profile": "market_feature_panel_v1",
+      "image": { "name": "market/validate-market-feature-panel", "tag_from": "git_sha" }
+    },
+    {
+      "name": "promote_market_feature_panel",
+      "kind": "promotion",
+      "source_dir": "runtime/stubs",
+      "runtime": "python",
+      "python_version": "3.12",
+      "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task promote_market_feature_panel",
+      "inputs": ["training_market_feature_panel_candidate", "training_market_feature_panel_quality_scorecard"],
+      "outputs": ["trusted_training_market_feature_panel"],
+      "promotion_rule": "market_feature_panel_training_v1",
+      "image": { "name": "market/promote-market-feature-panel", "tag_from": "git_sha" }
+    }
+  ]
+}

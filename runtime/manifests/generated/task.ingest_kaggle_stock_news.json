@@ -1,0 +1,16 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task ingest_kaggle_stock_news",
+  "image": {
+    "name": "market/ingest-kaggle-stock-news",
+    "tag_from": "git_sha"
+  },
+  "kind": "stub_ingestion",
+  "name": "ingest_kaggle_stock_news",
+  "outputs": [
+    "raw_kaggle_stock_news"
+  ],
+  "python_version": "3.12",
+  "runtime": "python",
+  "source": "kaggle_stock_news",
+  "source_dir": "runtime/stubs"
+}

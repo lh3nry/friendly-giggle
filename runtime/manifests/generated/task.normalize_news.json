@@ -1,0 +1,20 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task normalize_news",
+  "image": {
+    "name": "market/normalize-news",
+    "tag_from": "git_sha"
+  },
+  "inputs": [
+    "raw_kaggle_stock_news",
+    "raw_finnhub_company_news",
+    "raw_alpha_vantage_news_sentiment"
+  ],
+  "kind": "python_batch",
+  "name": "normalize_news",
+  "outputs": [
+    "clean_news_candidate"
+  ],
+  "python_version": "3.12",
+  "runtime": "python",
+  "source_dir": "runtime/stubs"
+}

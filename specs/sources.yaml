@@ -1,0 +1,57 @@
+{
+  "sources": [
+    {
+      "name": "kaggle_stock_news",
+      "display_name": "Kaggle Massive Stock News Analysis DB",
+      "source_url": "https://www.kaggle.com/datasets/miguelaenlle/massive-stock-news-analysis-db-for-nlpbacktests/data",
+      "auth_mode": "kaggle_api_token",
+      "demo_mode": "stubbed_no_credentials",
+      "asset_families": [
+        "news_articles",
+        "ticker_entity_mentions"
+      ],
+      "real_ingestion_notes": "Use the Kaggle API or a pre-downloaded dataset archive; preserve source publication timestamps and dataset snapshot version."
+    },
+    {
+      "name": "finnhub_open_data",
+      "display_name": "Finnhub Open Data",
+      "source_url": "https://finnhub.io/docs/api/open-data",
+      "auth_mode": "api_key_for_non_open_endpoints",
+      "demo_mode": "stubbed_no_credentials",
+      "asset_families": [
+        "company_news",
+        "company_profile",
+        "market_events"
+      ],
+      "real_ingestion_notes": "Use API-key-backed endpoints where required; capture request parameters, symbol universe, response status, and provider timestamp."
+    },
+    {
+      "name": "alpha_vantage",
+      "display_name": "Alpha Vantage",
+      "source_url": "https://www.alphavantage.co/documentation/",
+      "auth_mode": "api_key",
+      "demo_mode": "stubbed_no_credentials",
+      "asset_families": [
+        "daily_ohlcv",
+        "news_sentiment",
+        "company_overview",
+        "economic_indicators"
+      ],
+      "real_ingestion_notes": "Use function-specific endpoints; handle free-tier throttling, compact versus full output size, and explicit symbol/date parameters."
+    },
+    {
+      "name": "tiingo",
+      "display_name": "Tiingo",
+      "source_url": "https://www.tiingo.com/documentation/general/overview",
+      "auth_mode": "api_token",
+      "demo_mode": "stubbed_no_credentials",
+      "asset_families": [
+        "daily_ohlcv",
+        "symbol_metadata",
+        "news",
+        "crypto_forex"
+      ],
+      "real_ingestion_notes": "Use token-authenticated REST endpoints; keep ticker metadata separate from historical bars and store split/dividend adjustment fields."
+    }
+  ]
+}

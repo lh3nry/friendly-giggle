@@ -1,0 +1,19 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task validate_price_bars",
+  "image": {
+    "name": "market/validate-price-bars",
+    "tag_from": "git_sha"
+  },
+  "inputs": [
+    "clean_price_bars_candidate"
+  ],
+  "kind": "quality_check",
+  "name": "validate_price_bars",
+  "outputs": [
+    "clean_price_bars_quality_scorecard"
+  ],
+  "python_version": "3.12",
+  "quality_profile": "clean_price_bars_v1",
+  "runtime": "python",
+  "source_dir": "runtime/stubs"
+}

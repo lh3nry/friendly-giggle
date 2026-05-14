@@ -1,31 +1,223 @@
-assets:
-  - name: raw_news
-    uri: market://raw/news
-    zone: raw
-    owner: ingestion
-  - name: clean_news_candidate
-    uri: market://clean-candidate/news
-    zone: clean_candidate
-    owner: ingestion
-    depends_on:
-      - raw_news
-  - name: clean_news_quality_scorecard
-    uri: market://quality/news
-    zone: metadata
-    owner: quality
-    depends_on:
-      - clean_news_candidate
-  - name: clean_room_news
-    uri: market://clean-room/news
-    zone: clean_room
-    owner: ingestion
-    depends_on:
-      - clean_news_candidate
-      - clean_news_quality_scorecard
-  - name: quarantined_news
-    uri: market://quarantine/news
-    zone: quarantine
-    owner: quality
-    depends_on:
-      - clean_news_candidate
-      - clean_news_quality_scorecard
+{
+  "assets": [
+    {
+      "name": "raw_kaggle_stock_news",
+      "uri": "market://raw/kaggle/stock-news",
+      "zone": "raw",
+      "owner": "ingestion",
+      "data_type": "news_articles",
+      "source": "kaggle_stock_news"
+    },
+    {
+      "name": "raw_finnhub_company_news",
+      "uri": "market://raw/finnhub/company-news",
+      "zone": "raw",
+      "owner": "ingestion",
+      "data_type": "news_articles",
+      "source": "finnhub_open_data"
+    },
+    {
+      "name": "raw_alpha_vantage_news_sentiment",
+      "uri": "market://raw/alpha-vantage/news-sentiment",
+      "zone": "raw",
+      "owner": "ingestion",
+      "data_type": "news_sentiment",
+      "source": "alpha_vantage"
+    },
+    {
+      "name": "clean_news_candidate",
+      "uri": "market://clean-candidate/news",
+      "zone": "clean_candidate",
+      "owner": "ingestion",
+      "data_type": "normalized_news",
+      "depends_on": [
+        "raw_kaggle_stock_news",
+        "raw_finnhub_company_news",
+        "raw_alpha_vantage_news_sentiment"
+      ]
+    },
+    {
+      "name": "clean_news_quality_scorecard",
+      "uri": "market://quality/news",
+      "zone": "metadata",
+      "owner": "quality",
+      "data_type": "quality_scorecard",
+      "depends_on": [
+        "clean_news_candidate"
+      ]
+    },
+    {
+      "name": "clean_room_news",
+      "uri": "market://clean-room/news",
+      "zone": "clean_room",
+      "owner": "ingestion",
+      "data_type": "normalized_news",
+      "depends_on": [
+        "clean_news_candidate",
+        "clean_news_quality_scorecard"
+      ]
+    },
+    {
+      "name": "raw_alpha_vantage_daily_bars",
+      "uri": "market://raw/alpha-vantage/daily-bars",
+      "zone": "raw",
+      "owner": "ingestion",
+      "data_type": "ohlcv_bars",
+      "source": "alpha_vantage"
+    },
+    {
+      "name": "raw_tiingo_daily_bars",
+      "uri": "market://raw/tiingo/daily-bars",
+      "zone": "raw",
+      "owner": "ingestion",
+      "data_type": "ohlcv_bars",
+      "source": "tiingo"
+    },
+    {
+      "name": "clean_price_bars_candidate",
+      "uri": "market://clean-candidate/price-bars",
+      "zone": "clean_candidate",
+      "owner": "ingestion",
+      "data_type": "ohlcv_bars",
+      "depends_on": [
+        "raw_alpha_vantage_daily_bars",
+        "raw_tiingo_daily_bars"
+      ]
+    },
+    {
+      "name": "clean_price_bars_quality_scorecard",
+      "uri": "market://quality/price-bars",
+      "zone": "metadata",
+      "owner": "quality",
+      "data_type": "quality_scorecard",
+      "depends_on": [
+        "clean_price_bars_candidate"
+      ]
+    },
+    {
+      "name": "clean_room_price_bars",
+      "uri": "market://clean-room/price-bars",
+      "zone": "clean_room",
+      "owner": "ingestion",
+      "data_type": "ohlcv_bars",
+      "depends_on": [
+        "clean_price_bars_candidate",
+        "clean_price_bars_quality_scorecard"
+      ]
+    },
+    {
+      "name": "raw_finnhub_company_profile",
+      "uri": "market://raw/finnhub/company-profile",
+      "zone": "raw",
+      "owner": "ingestion",
+      "data_type": "company_profile",
+      "source": "finnhub_open_data"
+    },
+    {
+      "name": "raw_tiingo_symbol_metadata",
+      "uri": "market://raw/tiingo/symbol-metadata",
+      "zone": "raw",
+      "owner": "ingestion",
+      "data_type": "symbol_metadata",
+      "source": "tiingo"
+    },
+    {
+      "name": "clean_company_reference_candidate",
+      "uri": "market://clean-candidate/company-reference",
+      "zone": "clean_candidate",
+      "owner": "reference_data",
+      "data_type": "company_reference",
+      "depends_on": [
+        "raw_finnhub_company_profile",
+        "raw_tiingo_symbol_metadata"
+      ]
+    },
+    {
+      "name": "clean_company_reference_quality_scorecard",
+      "uri": "market://quality/company-reference",
+      "zone": "metadata",
+      "owner": "quality",
+      "data_type": "quality_scorecard",
+      "depends_on": [
+        "clean_company_reference_candidate"
+      ]
+    },
+    {
+      "name": "clean_room_company_reference",
+      "uri": "market://clean-room/company-reference",
+      "zone": "clean_room",
+      "owner": "reference_data",
+      "data_type": "company_reference",
+      "depends_on": [
+        "clean_company_reference_candidate",
+        "clean_company_reference_quality_scorecard"
+      ]
+    },
+    {
+      "name": "raw_alpha_vantage_company_overview",
+      "uri": "market://raw/alpha-vantage/company-overview",
+      "zone": "raw",
+      "owner": "ingestion",
+      "data_type": "fundamentals",
+      "source": "alpha_vantage"
+    },
+    {
+      "name": "clean_fundamentals_candidate",
+      "uri": "market://clean-candidate/fundamentals",
+      "zone": "clean_candidate",
+      "owner": "ingestion",
+      "data_type": "fundamentals",
+      "depends_on": [
+        "raw_alpha_vantage_company_overview",
+        "clean_room_company_reference"
+      ]
+    },
+    {
+      "name": "training_market_feature_panel_candidate",
+      "uri": "market://clean-candidate/features/market-panel",
+      "zone": "clean_candidate",
+      "owner": "features",
+      "data_type": "feature_panel",
+      "depends_on": [
+        "clean_room_news",
+        "clean_room_price_bars",
+        "clean_room_company_reference",
+        "clean_fundamentals_candidate"
+      ]
+    },
+    {
+      "name": "training_market_feature_panel_quality_scorecard",
+      "uri": "market://quality/features/market-panel",
+      "zone": "metadata",
+      "owner": "quality",
+      "data_type": "quality_scorecard",
+      "depends_on": [
+        "training_market_feature_panel_candidate"
+      ]
+    },
+    {
+      "name": "trusted_training_market_feature_panel",
+      "uri": "market://trusted-training/features/market-panel",
+      "zone": "trusted_training",
+      "owner": "features",
+      "data_type": "feature_panel",
+      "depends_on": [
+        "training_market_feature_panel_candidate",
+        "training_market_feature_panel_quality_scorecard"
+      ]
+    },
+    {
+      "name": "quarantined_market_data",
+      "uri": "market://quarantine/market-data",
+      "zone": "quarantine",
+      "owner": "quality",
+      "data_type": "quarantine_record",
+      "depends_on": [
+        "clean_news_quality_scorecard",
+        "clean_price_bars_quality_scorecard",
+        "clean_company_reference_quality_scorecard",
+        "training_market_feature_panel_quality_scorecard"
+      ]
+    }
+  ]
+}

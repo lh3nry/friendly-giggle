@@ -1,0 +1,16 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task ingest_alpha_vantage_news_sentiment",
+  "image": {
+    "name": "market/ingest-alpha-vantage-news-sentiment",
+    "tag_from": "git_sha"
+  },
+  "kind": "stub_ingestion",
+  "name": "ingest_alpha_vantage_news_sentiment",
+  "outputs": [
+    "raw_alpha_vantage_news_sentiment"
+  ],
+  "python_version": "3.12",
+  "runtime": "python",
+  "source": "alpha_vantage",
+  "source_dir": "runtime/stubs"
+}

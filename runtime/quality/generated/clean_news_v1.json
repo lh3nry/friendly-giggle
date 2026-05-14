@@ -1,0 +1,24 @@
+{
+  "asset": "clean_news_candidate",
+  "hard_gates": [
+    "schema_valid",
+    "observed_at_present",
+    "no_future_timestamps",
+    "duplicate_rate_below_max",
+    "leakage_safety_valid"
+  ],
+  "name": "clean_news_v1",
+  "soft_scores": {
+    "completeness_quality": 0.2,
+    "deduplication_quality": 0.15,
+    "distribution_quality": 0.15,
+    "entity_linking_quality": 0.2,
+    "freshness_quality": 0.15,
+    "source_reliability_quality": 0.15
+  },
+  "thresholds": {
+    "clean_room_warning": 0.75,
+    "quarantine_below": 0.75,
+    "trusted_training": 0.9
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task validate_clean_news",
+  "image": {
+    "name": "market/validate-clean-news",
+    "tag_from": "git_sha"
+  },
+  "inputs": [
+    "clean_news_candidate"
+  ],
+  "kind": "quality_check",
+  "name": "validate_clean_news",
+  "outputs": [
+    "clean_news_quality_scorecard"
+  ],
+  "python_version": "3.12",
+  "quality_profile": "clean_news_v1",
+  "runtime": "python",
+  "source_dir": "runtime/stubs"
+}

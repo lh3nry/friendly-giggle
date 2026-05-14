@@ -1,0 +1,21 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task build_market_feature_panel",
+  "image": {
+    "name": "market/build-market-feature-panel",
+    "tag_from": "git_sha"
+  },
+  "inputs": [
+    "clean_room_news",
+    "clean_room_price_bars",
+    "clean_room_company_reference",
+    "clean_fundamentals_candidate"
+  ],
+  "kind": "python_batch",
+  "name": "build_market_feature_panel",
+  "outputs": [
+    "training_market_feature_panel_candidate"
+  ],
+  "python_version": "3.12",
+  "runtime": "python",
+  "source_dir": "runtime/stubs"
+}

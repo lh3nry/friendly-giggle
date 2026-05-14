@@ -1,0 +1,88 @@
+{
+  "source_schemas": [
+    {
+      "name": "raw_kaggle_stock_news_v1",
+      "asset": "raw_kaggle_stock_news",
+      "shape": "source_snapshot_row",
+      "required_fields": ["source_row_id", "symbol", "published_at", "title", "article_body", "url", "publisher", "dataset_snapshot"],
+      "notes": "Demo shape for Kaggle stock-news rows. Real ingestion should map the downloaded dataset columns into this contract and preserve the dataset snapshot identifier."
+    },
+    {
+      "name": "raw_finnhub_company_news_v1",
+      "asset": "raw_finnhub_company_news",
+      "shape": "finnhub_company_news_item",
+      "required_fields": ["category", "datetime", "headline", "id", "related", "source", "summary", "url"],
+      "notes": "Mirrors the common Finnhub company-news item shape with epoch-second publication time and ticker in related."
+    },
+    {
+      "name": "raw_alpha_vantage_news_sentiment_v1",
+      "asset": "raw_alpha_vantage_news_sentiment",
+      "shape": "alpha_vantage_news_sentiment_feed_item",
+      "required_fields": ["title", "url", "time_published", "summary", "source", "topics", "overall_sentiment_score", "overall_sentiment_label", "ticker_sentiment"],
+      "notes": "Mirrors Alpha Vantage NEWS_SENTIMENT feed items, including nested topic and ticker sentiment arrays."
+    },
+    {
+      "name": "raw_alpha_vantage_daily_bars_v1",
+      "asset": "raw_alpha_vantage_daily_bars",
+      "shape": "alpha_vantage_time_series_daily_row",
+      "required_fields": ["symbol", "date", "1. open", "2. high", "3. low", "4. close", "5. volume"],
+      "notes": "Preserves Alpha Vantage numbered OHLCV field names so the normalizer demonstrates provider-to-canonical mapping."
+    },
+    {
+      "name": "raw_tiingo_daily_bars_v1",
+      "asset": "raw_tiingo_daily_bars",
+      "shape": "tiingo_daily_price_item",
+      "required_fields": ["ticker", "date", "open", "high", "low", "close", "volume", "adjOpen", "adjHigh", "adjLow", "adjClose", "adjVolume", "divCash", "splitFactor"],
+      "notes": "Mirrors Tiingo daily prices with adjusted fields, dividend cash, and split factor."
+    },
+    {
+      "name": "raw_finnhub_company_profile_v1",
+      "asset": "raw_finnhub_company_profile",
+      "shape": "finnhub_company_profile2",
+      "required_fields": ["country", "currency", "exchange", "finnhubIndustry", "ipo", "marketCapitalization", "name", "shareOutstanding", "ticker", "weburl"],
+      "notes": "Mirrors the company profile shape used for reference-data joins."
+    },
+    {
+      "name": "raw_tiingo_symbol_metadata_v1",
+      "asset": "raw_tiingo_symbol_metadata",
+      "shape": "tiingo_symbol_metadata",
+      "required_fields": ["ticker", "name", "exchangeCode", "startDate", "endDate", "description"],
+      "notes": "Represents Tiingo ticker metadata used to enrich provider reference data."
+    },
+    {
+      "name": "raw_alpha_vantage_company_overview_v1",
+      "asset": "raw_alpha_vantage_company_overview",
+      "shape": "alpha_vantage_company_overview",
+      "required_fields": ["Symbol", "AssetType", "Name", "Description", "Exchange", "Currency", "Country", "Sector", "Industry", "MarketCapitalization"],
+      "notes": "Mirrors Alpha Vantage COMPANY_OVERVIEW-style fundamentals fields."
+    },
+    {
+      "name": "clean_news_candidate_v1",
+      "asset": "clean_news_candidate",
+      "shape": "canonical_normalized_news",
+      "required_fields": ["news_id", "symbol", "published_at", "headline", "body", "source_name", "source_url", "sentiment_score", "sentiment_label", "as_of_time"],
+      "notes": "Canonical news shape consumed by quality checks and feature joins."
+    },
+    {
+      "name": "clean_price_bars_candidate_v1",
+      "asset": "clean_price_bars_candidate",
+      "shape": "canonical_daily_ohlcv_bar",
+      "required_fields": ["symbol", "bar_date", "open", "high", "low", "close", "volume", "adjusted_close", "currency", "as_of_time"],
+      "notes": "Canonical daily OHLCV shape after Alpha Vantage and Tiingo normalization."
+    },
+    {
+      "name": "clean_company_reference_candidate_v1",
+      "asset": "clean_company_reference_candidate",
+      "shape": "canonical_company_reference",
+      "required_fields": ["symbol", "company_name", "exchange", "currency", "country", "sector", "industry", "provider_ids"],
+      "notes": "Canonical company reference shape for cross-provider joins."
+    },
+    {
+      "name": "training_market_feature_panel_candidate_v1",
+      "asset": "training_market_feature_panel_candidate",
+      "shape": "canonical_training_feature_panel",
+      "required_fields": ["symbol", "as_of_date", "close", "volume", "news_sentiment_1d", "news_count_1d", "sector", "label_available_at"],
+      "notes": "Point-in-time feature panel shape for demonstrating trusted-training promotion."
+    }
+  ]
+}

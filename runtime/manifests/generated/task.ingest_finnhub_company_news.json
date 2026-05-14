@@ -1,0 +1,16 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task ingest_finnhub_company_news",
+  "image": {
+    "name": "market/ingest-finnhub-company-news",
+    "tag_from": "git_sha"
+  },
+  "kind": "stub_ingestion",
+  "name": "ingest_finnhub_company_news",
+  "outputs": [
+    "raw_finnhub_company_news"
+  ],
+  "python_version": "3.12",
+  "runtime": "python",
+  "source": "finnhub_open_data",
+  "source_dir": "runtime/stubs"
+}

@@ -1,0 +1,16 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task ingest_tiingo_symbol_metadata",
+  "image": {
+    "name": "market/ingest-tiingo-symbol-metadata",
+    "tag_from": "git_sha"
+  },
+  "kind": "stub_ingestion",
+  "name": "ingest_tiingo_symbol_metadata",
+  "outputs": [
+    "raw_tiingo_symbol_metadata"
+  ],
+  "python_version": "3.12",
+  "runtime": "python",
+  "source": "tiingo",
+  "source_dir": "runtime/stubs"
+}

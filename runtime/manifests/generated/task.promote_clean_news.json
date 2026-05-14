@@ -1,0 +1,20 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task promote_clean_news",
+  "image": {
+    "name": "market/promote-clean-news",
+    "tag_from": "git_sha"
+  },
+  "inputs": [
+    "clean_news_candidate",
+    "clean_news_quality_scorecard"
+  ],
+  "kind": "promotion",
+  "name": "promote_clean_news",
+  "outputs": [
+    "clean_room_news"
+  ],
+  "promotion_rule": "news_clean_room_v1",
+  "python_version": "3.12",
+  "runtime": "python",
+  "source_dir": "runtime/stubs"
+}

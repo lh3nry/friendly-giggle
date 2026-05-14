@@ -1,0 +1,22 @@
+{
+  "asset": "clean_company_reference_candidate",
+  "hard_gates": [
+    "schema_valid",
+    "symbol_present",
+    "exchange_present",
+    "provider_key_present",
+    "duplicate_symbol_below_max"
+  ],
+  "name": "company_reference_v1",
+  "soft_scores": {
+    "freshness_quality": 0.2,
+    "identifier_completeness_quality": 0.3,
+    "provider_consistency_quality": 0.3,
+    "sector_industry_coverage_quality": 0.2
+  },
+  "thresholds": {
+    "clean_room_warning": 0.78,
+    "quarantine_below": 0.78,
+    "trusted_training": 0.9
+  }
+}

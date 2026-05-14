@@ -1,0 +1,20 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task promote_company_reference",
+  "image": {
+    "name": "market/promote-company-reference",
+    "tag_from": "git_sha"
+  },
+  "inputs": [
+    "clean_company_reference_candidate",
+    "clean_company_reference_quality_scorecard"
+  ],
+  "kind": "promotion",
+  "name": "promote_company_reference",
+  "outputs": [
+    "clean_room_company_reference"
+  ],
+  "promotion_rule": "company_reference_clean_room_v1",
+  "python_version": "3.12",
+  "runtime": "python",
+  "source_dir": "runtime/stubs"
+}

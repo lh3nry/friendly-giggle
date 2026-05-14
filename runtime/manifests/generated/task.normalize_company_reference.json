@@ -1,0 +1,19 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task normalize_company_reference",
+  "image": {
+    "name": "market/normalize-company-reference",
+    "tag_from": "git_sha"
+  },
+  "inputs": [
+    "raw_finnhub_company_profile",
+    "raw_tiingo_symbol_metadata"
+  ],
+  "kind": "python_batch",
+  "name": "normalize_company_reference",
+  "outputs": [
+    "clean_company_reference_candidate"
+  ],
+  "python_version": "3.12",
+  "runtime": "python",
+  "source_dir": "runtime/stubs"
+}

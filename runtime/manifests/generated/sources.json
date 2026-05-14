@@ -1,0 +1,57 @@
+{
+  "sources": [
+    {
+      "asset_families": [
+        "news_articles",
+        "ticker_entity_mentions"
+      ],
+      "auth_mode": "kaggle_api_token",
+      "demo_mode": "stubbed_no_credentials",
+      "display_name": "Kaggle Massive Stock News Analysis DB",
+      "name": "kaggle_stock_news",
+      "real_ingestion_notes": "Use the Kaggle API or a pre-downloaded dataset archive; preserve source publication timestamps and dataset snapshot version.",
+      "source_url": "https://www.kaggle.com/datasets/miguelaenlle/massive-stock-news-analysis-db-for-nlpbacktests/data"
+    },
+    {
+      "asset_families": [
+        "company_news",
+        "company_profile",
+        "market_events"
+      ],
+      "auth_mode": "api_key_for_non_open_endpoints",
+      "demo_mode": "stubbed_no_credentials",
+      "display_name": "Finnhub Open Data",
+      "name": "finnhub_open_data",
+      "real_ingestion_notes": "Use API-key-backed endpoints where required; capture request parameters, symbol universe, response status, and provider timestamp.",
+      "source_url": "https://finnhub.io/docs/api/open-data"
+    },
+    {
+      "asset_families": [
+        "daily_ohlcv",
+        "news_sentiment",
+        "company_overview",
+        "economic_indicators"
+      ],
+      "auth_mode": "api_key",
+      "demo_mode": "stubbed_no_credentials",
+      "display_name": "Alpha Vantage",
+      "name": "alpha_vantage",
+      "real_ingestion_notes": "Use function-specific endpoints; handle free-tier throttling, compact versus full output size, and explicit symbol/date parameters.",
+      "source_url": "https://www.alphavantage.co/documentation/"
+    },
+    {
+      "asset_families": [
+        "daily_ohlcv",
+        "symbol_metadata",
+        "news",
+        "crypto_forex"
+      ],
+      "auth_mode": "api_token",
+      "demo_mode": "stubbed_no_credentials",
+      "display_name": "Tiingo",
+      "name": "tiingo",
+      "real_ingestion_notes": "Use token-authenticated REST endpoints; keep ticker metadata separate from historical bars and store split/dividend adjustment fields.",
+      "source_url": "https://www.tiingo.com/documentation/general/overview"
+    }
+  ]
+}

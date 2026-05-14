@@ -1,17 +1,52 @@
-promotion_rules:
-  - name: news_clean_room_v1
-    input_asset: clean_news_candidate
-    scorecard_asset: clean_news_quality_scorecard
-    decisions:
-      - name: quarantine
-        when:
-          any_hard_gate_failed: true
-      - name: trusted_training
-        when:
-          overall_score_gte: 0.90
-      - name: clean_room_warning
-        when:
-          overall_score_gte: 0.75
-      - name: quarantine
-        when:
-          overall_score_lt: 0.75
+{
+  "promotion_rules": [
+    {
+      "name": "news_clean_room_v1",
+      "input_asset": "clean_news_candidate",
+      "scorecard_asset": "clean_news_quality_scorecard",
+      "output_asset": "clean_room_news",
+      "decisions": [
+        { "name": "quarantine", "when": { "any_hard_gate_failed": true } },
+        { "name": "trusted_training_ready", "when": { "overall_score_gte": 0.90 } },
+        { "name": "clean_room_warning", "when": { "overall_score_gte": 0.75 } },
+        { "name": "quarantine", "when": { "overall_score_lt": 0.75 } }
+      ]
+    },
+    {
+      "name": "price_bars_clean_room_v1",
+      "input_asset": "clean_price_bars_candidate",
+      "scorecard_asset": "clean_price_bars_quality_scorecard",
+      "output_asset": "clean_room_price_bars",
+      "decisions": [
+        { "name": "quarantine", "when": { "any_hard_gate_failed": true } },
+        { "name": "trusted_training_ready", "when": { "overall_score_gte": 0.92 } },
+        { "name": "clean_room_warning", "when": { "overall_score_gte": 0.80 } },
+        { "name": "quarantine", "when": { "overall_score_lt": 0.80 } }
+      ]
+    },
+    {
+      "name": "company_reference_clean_room_v1",
+      "input_asset": "clean_company_reference_candidate",
+      "scorecard_asset": "clean_company_reference_quality_scorecard",
+      "output_asset": "clean_room_company_reference",
+      "decisions": [
+        { "name": "quarantine", "when": { "any_hard_gate_failed": true } },
+        { "name": "trusted_training_ready", "when": { "overall_score_gte": 0.90 } },
+        { "name": "clean_room_warning", "when": { "overall_score_gte": 0.78 } },
+        { "name": "quarantine", "when": { "overall_score_lt": 0.78 } }
+      ]
+    },
+    {
+      "name": "market_feature_panel_training_v1",
+      "input_asset": "training_market_feature_panel_candidate",
+      "scorecard_asset": "training_market_feature_panel_quality_scorecard",
+      "output_asset": "trusted_training_market_feature_panel",
+      "decisions": [
+        { "name": "quarantine", "when": { "any_hard_gate_failed": true } },
+        { "name": "trusted_training", "when": { "overall_score_gte": 0.93 } },
+        { "name": "clean_room_warning", "when": { "overall_score_gte": 0.82 } },
+        { "name": "quarantine", "when": { "overall_score_lt": 0.82 } }
+      ]
+    }
+  ]
+}

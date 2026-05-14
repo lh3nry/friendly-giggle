@@ -1,0 +1,20 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task promote_price_bars",
+  "image": {
+    "name": "market/promote-price-bars",
+    "tag_from": "git_sha"
+  },
+  "inputs": [
+    "clean_price_bars_candidate",
+    "clean_price_bars_quality_scorecard"
+  ],
+  "kind": "promotion",
+  "name": "promote_price_bars",
+  "outputs": [
+    "clean_room_price_bars"
+  ],
+  "promotion_rule": "price_bars_clean_room_v1",
+  "python_version": "3.12",
+  "runtime": "python",
+  "source_dir": "runtime/stubs"
+}

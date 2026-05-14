@@ -1,20 +1,97 @@
-quality_profiles:
-  - name: clean_news_v1
-    asset: clean_news_candidate
-    hard_gates:
-      - schema_valid
-      - observed_at_present
-      - no_future_timestamps
-      - duplicate_rate_below_max
-      - leakage_safety_valid
-    soft_scores:
-      completeness_quality: 0.20
-      freshness_quality: 0.15
-      deduplication_quality: 0.15
-      entity_linking_quality: 0.20
-      source_reliability_quality: 0.15
-      distribution_quality: 0.15
-    thresholds:
-      trusted_training: 0.90
-      clean_room_warning: 0.75
-      quarantine_below: 0.75
+{
+  "quality_profiles": [
+    {
+      "name": "clean_news_v1",
+      "asset": "clean_news_candidate",
+      "hard_gates": [
+        "schema_valid",
+        "observed_at_present",
+        "no_future_timestamps",
+        "duplicate_rate_below_max",
+        "leakage_safety_valid"
+      ],
+      "soft_scores": {
+        "completeness_quality": 0.20,
+        "freshness_quality": 0.15,
+        "deduplication_quality": 0.15,
+        "entity_linking_quality": 0.20,
+        "source_reliability_quality": 0.15,
+        "distribution_quality": 0.15
+      },
+      "thresholds": {
+        "trusted_training": 0.90,
+        "clean_room_warning": 0.75,
+        "quarantine_below": 0.75
+      }
+    },
+    {
+      "name": "clean_price_bars_v1",
+      "asset": "clean_price_bars_candidate",
+      "hard_gates": [
+        "schema_valid",
+        "symbol_present",
+        "bar_time_present",
+        "ohlc_non_negative",
+        "high_low_bounds_valid",
+        "no_future_timestamps"
+      ],
+      "soft_scores": {
+        "session_coverage_quality": 0.25,
+        "provider_agreement_quality": 0.25,
+        "freshness_quality": 0.20,
+        "corporate_action_adjustment_quality": 0.15,
+        "volume_outlier_quality": 0.15
+      },
+      "thresholds": {
+        "trusted_training": 0.92,
+        "clean_room_warning": 0.80,
+        "quarantine_below": 0.80
+      }
+    },
+    {
+      "name": "company_reference_v1",
+      "asset": "clean_company_reference_candidate",
+      "hard_gates": [
+        "schema_valid",
+        "symbol_present",
+        "exchange_present",
+        "provider_key_present",
+        "duplicate_symbol_below_max"
+      ],
+      "soft_scores": {
+        "identifier_completeness_quality": 0.30,
+        "provider_consistency_quality": 0.30,
+        "freshness_quality": 0.20,
+        "sector_industry_coverage_quality": 0.20
+      },
+      "thresholds": {
+        "trusted_training": 0.90,
+        "clean_room_warning": 0.78,
+        "quarantine_below": 0.78
+      }
+    },
+    {
+      "name": "market_feature_panel_v1",
+      "asset": "training_market_feature_panel_candidate",
+      "hard_gates": [
+        "schema_valid",
+        "as_of_time_present",
+        "no_label_leakage",
+        "feature_timestamp_lte_as_of_time",
+        "join_keys_present"
+      ],
+      "soft_scores": {
+        "feature_completeness_quality": 0.25,
+        "label_maturity_quality": 0.20,
+        "cross_source_join_quality": 0.20,
+        "distribution_quality": 0.20,
+        "training_window_coverage_quality": 0.15
+      },
+      "thresholds": {
+        "trusted_training": 0.93,
+        "clean_room_warning": 0.82,
+        "quarantine_below": 0.82
+      }
+    }
+  ]
+}

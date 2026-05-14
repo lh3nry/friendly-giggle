@@ -1,17 +1,99 @@
-dags:
-  - name: ingest_news
-    schedule: "@hourly"
-    tasks:
-      - ingest_news
-
-  - name: normalize_and_validate_news
-    schedule:
-      asset_trigger:
-        any:
-          - raw_news
-    tasks:
-      - normalize_news
-      - validate_clean_news
-    dependencies:
-      - from: normalize_news
-        to: validate_clean_news
+{
+  "dags": [
+    {
+      "name": "demo_ingest_news_sources",
+      "description": "Stub ingestion for Kaggle, Finnhub, and Alpha Vantage news inputs.",
+      "schedule": "@daily",
+      "tasks": [
+        "ingest_kaggle_stock_news",
+        "ingest_finnhub_company_news",
+        "ingest_alpha_vantage_news_sentiment"
+      ]
+    },
+    {
+      "name": "demo_prepare_news_clean_room",
+      "description": "Normalize multi-source news, validate it, and promote it to the clean room.",
+      "schedule": {
+        "asset_trigger": {
+          "all": [
+            "raw_kaggle_stock_news",
+            "raw_finnhub_company_news",
+            "raw_alpha_vantage_news_sentiment"
+          ]
+        }
+      },
+      "tasks": [
+        "normalize_news",
+        "validate_clean_news",
+        "promote_clean_news"
+      ],
+      "dependencies": [
+        { "from": "normalize_news", "to": "validate_clean_news" },
+        { "from": "validate_clean_news", "to": "promote_clean_news" }
+      ]
+    },
+    {
+      "name": "demo_prepare_price_bars",
+      "description": "Ingest Alpha Vantage and Tiingo OHLCV bars, normalize them, validate them, and promote them.",
+      "schedule": "@daily",
+      "tasks": [
+        "ingest_alpha_vantage_daily_bars",
+        "ingest_tiingo_daily_bars",
+        "normalize_price_bars",
+        "validate_price_bars",
+        "promote_price_bars"
+      ],
+      "dependencies": [
+        { "from": "ingest_alpha_vantage_daily_bars", "to": "normalize_price_bars" },
+        { "from": "ingest_tiingo_daily_bars", "to": "normalize_price_bars" },
+        { "from": "normalize_price_bars", "to": "validate_price_bars" },
+        { "from": "validate_price_bars", "to": "promote_price_bars" }
+      ]
+    },
+    {
+      "name": "demo_prepare_company_reference",
+      "description": "Ingest provider reference data and promote a clean company reference asset.",
+      "schedule": "@daily",
+      "tasks": [
+        "ingest_finnhub_company_profile",
+        "ingest_tiingo_symbol_metadata",
+        "normalize_company_reference",
+        "validate_company_reference",
+        "promote_company_reference",
+        "ingest_alpha_vantage_company_overview",
+        "normalize_fundamentals"
+      ],
+      "dependencies": [
+        { "from": "ingest_finnhub_company_profile", "to": "normalize_company_reference" },
+        { "from": "ingest_tiingo_symbol_metadata", "to": "normalize_company_reference" },
+        { "from": "normalize_company_reference", "to": "validate_company_reference" },
+        { "from": "validate_company_reference", "to": "promote_company_reference" },
+        { "from": "promote_company_reference", "to": "normalize_fundamentals" },
+        { "from": "ingest_alpha_vantage_company_overview", "to": "normalize_fundamentals" }
+      ]
+    },
+    {
+      "name": "demo_build_training_feature_panel",
+      "description": "Join clean-room news, prices, reference data, and fundamentals into a trusted training feature panel.",
+      "schedule": {
+        "asset_trigger": {
+          "all": [
+            "clean_room_news",
+            "clean_room_price_bars",
+            "clean_room_company_reference",
+            "clean_fundamentals_candidate"
+          ]
+        }
+      },
+      "tasks": [
+        "build_market_feature_panel",
+        "validate_market_feature_panel",
+        "promote_market_feature_panel"
+      ],
+      "dependencies": [
+        { "from": "build_market_feature_panel", "to": "validate_market_feature_panel" },
+        { "from": "validate_market_feature_panel", "to": "promote_market_feature_panel" }
+      ]
+    }
+  ]
+}

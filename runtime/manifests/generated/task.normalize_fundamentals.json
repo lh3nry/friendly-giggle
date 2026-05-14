@@ -1,0 +1,19 @@
+{
+  "entrypoint": "python /opt/airflow/repo/runtime/stubs/run_task.py --task normalize_fundamentals",
+  "image": {
+    "name": "market/normalize-fundamentals",
+    "tag_from": "git_sha"
+  },
+  "inputs": [
+    "raw_alpha_vantage_company_overview",
+    "clean_room_company_reference"
+  ],
+  "kind": "python_batch",
+  "name": "normalize_fundamentals",
+  "outputs": [
+    "clean_fundamentals_candidate"
+  ],
+  "python_version": "3.12",
+  "runtime": "python",
+  "source_dir": "runtime/stubs"
+}

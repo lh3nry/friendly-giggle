@@ -1,0 +1,24 @@
+{
+  "asset": "clean_price_bars_candidate",
+  "hard_gates": [
+    "schema_valid",
+    "symbol_present",
+    "bar_time_present",
+    "ohlc_non_negative",
+    "high_low_bounds_valid",
+    "no_future_timestamps"
+  ],
+  "name": "clean_price_bars_v1",
+  "soft_scores": {
+    "corporate_action_adjustment_quality": 0.15,
+    "freshness_quality": 0.2,
+    "provider_agreement_quality": 0.25,
+    "session_coverage_quality": 0.25,
+    "volume_outlier_quality": 0.15
+  },
+  "thresholds": {
+    "clean_room_warning": 0.8,
+    "quarantine_below": 0.8,
+    "trusted_training": 0.92
+  }
+}
